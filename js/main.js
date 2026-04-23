@@ -4,12 +4,12 @@
 // Movie genres are mapped by vibe name in the TMDB fetch function
 // ==============================
 const vibes = [
-    { name: "Cozy", emoji: "🛋️", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO" },
-    { name: "Hype", emoji: "🔥", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWUa8ZRTfalHk" },
-    { name: "Sad Girl", emoji: "🌧️", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634" },
-    { name: "Adventurous", emoji: "🌍", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM" },
-    { name: "Romantic", emoji: "🌹", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWThIs101DNtS" },
-    { name: "Chill", emoji: "😌", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" }
+    { name: "Cozy", emoji: "🛋️", color: "#e8a87c", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO" },
+    { name: "Hype", emoji: "🔥", color: "#ff4d4d", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWUa8ZRTfalHk" },
+    { name: "Sad Girl", emoji: "🌧️", color: "#7eb8d4", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634" },
+    { name: "Adventurous", emoji: "🌍", color: "#6dbf8b", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM" },
+    { name: "Romantic", emoji: "🌹", color: "#e88ea0", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWThIs101DNtS" },
+    { name: "Chill", emoji: "😌", color: "#a78bdb", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" }
 ];
 
 // Movie genre IDs from TMDB that match each vibe
@@ -22,7 +22,7 @@ const vibeToGenre = {
     "Chill":       16   // Animation
 };
 
-// Your TMDB API key — you'll add this after signing up at themoviedb.org
+// Your TMDB API key
 const TMDB_API_KEY = "7201d2d2d9f4414978a54d3d6ff96061";
 
 // Keeps track of which vibe the user selected
@@ -53,9 +53,25 @@ function buildVibeGrid() {
 
         // When clicked, store the selected vibe and show the mode selector
         btn.onclick = () => {
-            selectedVibe = vibe;
-            document.getElementById('mode-selector').classList.remove('hidden');
-        };
+    selectedVibe = vibe;
+
+    // Remove selected class from all buttons
+    document.querySelectorAll('.vibe-btn').forEach(b => {
+        b.classList.remove('selected');
+        b.style.borderColor = '#333';
+    });
+
+    // Highlight selected button with vibe color
+    btn.classList.add('selected');
+    btn.style.borderColor = vibe.color;
+    btn.style.color = vibe.color;
+
+    // Apply vibe color to the logo and nav border
+    document.querySelector('.logo').style.color = vibe.color;
+    document.querySelector('nav').style.borderBottomColor = vibe.color;
+
+    document.getElementById('mode-selector').classList.remove('hidden');
+};
 
         grid.appendChild(btn);
     });
@@ -80,6 +96,7 @@ function loadResults(mode) {
 // Uses the vibe's genre ID to get matching movies
 // ==============================
 async function fetchMovies() {
+    document.getElementById('results-title').style.color = selectedVibe.color;
     const genre = vibeToGenre[selectedVibe.name];
     const url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genre}&sort_by=popularity.desc`;
 
@@ -103,15 +120,36 @@ function displayMovies(movies) {
     const grid = document.getElementById('results-grid');
     grid.innerHTML = '';
 
+    grid.style.display = 'grid';
+    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(160px, 1fr))';
+    grid.style.gap = '20px';
+
     movies.slice(0, 12).forEach(movie => {
         const card = document.createElement('div');
         card.classList.add('movie-card');
-        card.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}">
-            <h3>${movie.title}</h3>
-            <p>${movie.release_date.slice(0, 4)}</p>
-            <button onclick="saveToWatchlist(${movie.id}, '${movie.title.replace(/'/g, "\\'")}', '${movie.poster_path}')">+ Watchlist</button>
-        `;
+
+        const img = document.createElement('img');
+        img.src = `https://image.tmdb.org/t/p/w300${movie.poster_path}`;
+        img.alt = movie.title;
+
+        const title = document.createElement('h3');
+        title.textContent = movie.title;
+
+        const year = document.createElement('p');
+        year.textContent = movie.release_date.slice(0, 4);
+
+        const btn = document.createElement('button');
+        btn.textContent = '+ Watchlist';
+
+        // Attach click handler directly instead of using onclick in HTML
+        btn.addEventListener('click', () => {
+            saveToWatchlist(movie.id, movie.title, movie.poster_path);
+        });
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(year);
+        card.appendChild(btn);
         grid.appendChild(card);
     });
 }
@@ -121,14 +159,21 @@ function displayMovies(movies) {
 // Embeds the Spotify playlist for the selected vibe
 // ==============================
 function showMusic() {
+    document.getElementById('results-title').style.color = selectedVibe.color;
     document.getElementById('results-title').textContent = selectedVibe.emoji + ' ' + selectedVibe.name + ' Playlist';
-    document.getElementById('results-grid').innerHTML = `
+
+    const grid = document.getElementById('results-grid');
+    grid.style.display = 'block';
+    grid.style.width = '100%';
+
+    grid.innerHTML = `
         <iframe 
             src="${selectedVibe.playlist}"
             width="100%" 
-            height="380" 
+            height="480" 
             frameborder="0" 
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            style="width: 100%; min-width: 300px; border-radius: 12px;">
         </iframe>
     `;
 }
@@ -138,10 +183,8 @@ function showMusic() {
 // Stores a movie in localStorage
 // ==============================
 function saveToWatchlist(id, title, poster) {
-    // Get existing watchlist from localStorage, or start with empty array
     const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 
-    // Don't add duplicates
     if (watchlist.find(m => m.id === id)) {
         alert(`${title} is already in your watchlist!`);
         return;
@@ -186,14 +229,39 @@ function removeFromWatchlist(id) {
     let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
     watchlist = watchlist.filter(m => m.id !== id);
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
-    displayWatchlist(); // refresh the page
+    displayWatchlist();
 }
 
 // ==============================
 // ON PAGE LOAD
-// Build the vibe grid and set up watchlist nav link
 // ==============================
 buildVibeGrid();
 
-// When the user clicks "Watchlist" in the nav, also render the saved movies
+// Load saved theme preference
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('theme-toggle').textContent = '🌙 Dark Mode';
+}
+
 document.querySelector('a[onclick="showPage(\'watchlist\')"]').addEventListener('click', displayWatchlist);
+
+// ==============================
+// THEME TOGGLE
+// Switches between dark and light mode
+// ==============================
+function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById('theme-toggle');
+
+    body.classList.toggle('light-mode');
+
+    // Update button label based on current mode
+    if (body.classList.contains('light-mode')) {
+        btn.textContent = '🌙 Dark Mode';
+    } else {
+        btn.textContent = '☀️ Light Mode';
+    }
+
+    // Save preference to localStorage
+    localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+}

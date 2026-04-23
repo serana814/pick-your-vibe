@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Check</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <span class="logo">Vibe Check ✨</span>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('results')">Results</a>
+            <a href="#" onclick="showPage('watchlist')">Watchlist</a>
+        </div>
+        <button id="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="page-home" class="page">
+        <h1>What's your vibe?</h1>
+        <p>Pick a mood to get started.</p>
+
+        <!-- Vibe buttons will go here -->
+        <div id="vibe-grid"></div>
+
+        <!-- After picking a vibe, user chooses movies or music -->
+        <div id="mode-selector" class="hidden">
+            <p>Are you in the mood for...</p>
+            <button onclick="loadResults('movies')">🎬 Movies</button>
+            <button onclick="loadResults('music')">🎵 Music</button>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="page-results" class="page hidden">
+        <h2 id="results-title"></h2>
+        <div id="results-grid"></div>
+    </div>
+
+    <!-- Watchlist Page -->
+    <div id="page-watchlist" class="page hidden">
+        <h2>My Watchlist</h2>
+        <div id="watchlist-grid"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
