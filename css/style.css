@@ -260,3 +260,33 @@ body.light-mode #theme-toggle {
 body.light-mode #theme-toggle:hover {
     background-color: #e8e8e8;
 }
+/* ==============================
+   BACK BUTTON
+============================== */
+#back-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+}
+
+#back-btn:hover {
+    border-color: #ffffff;
+}
+
+body.light-mode #back-btn {
+    color: #0f0f0f;
+    border-color: #999;
+}
+
+body.light-mode #back-btn:hover {
+    border-color: #0f0f0f;
+}
+body.light-mode .nav-links a {
+    color: #0f0f0f;
+}

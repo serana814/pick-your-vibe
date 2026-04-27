@@ -265,3 +265,11 @@ function toggleTheme() {
     // Save preference to localStorage
     localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
 }
+// ==============================
+// GO BACK
+// Returns user to home page and resets mode selector
+// ==============================
+function goBack() {
+    showPage('home');
+    document.getElementById('mode-selector').classList.add('hidden');
+}
