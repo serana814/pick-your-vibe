@@ -8,8 +8,9 @@ const vibes = [
     { name: "Hype", emoji: "🔥", color: "#ff4d4d", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWUa8ZRTfalHk" },
     { name: "Sad Girl", emoji: "🌧️", color: "#7eb8d4", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634" },
     { name: "Adventurous", emoji: "🌍", color: "#6dbf8b", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM" },
-    { name: "Romantic", emoji: "🌹", color: "#e88ea0", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1EVGJJ3r00UGAt" },];
-
+    { name: "Romantic", emoji: "🌹", color: "#e88ea0", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1EVGJJ3r00UGAt" },
+    { name: "Chill", emoji: "😌", color: "#a78bdb", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" }
+];
 // Movie genre IDs from TMDB that match each vibe
 const vibeToGenre = {
     "Cozy":        35,  // Comedy

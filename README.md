@@ -5,7 +5,7 @@
 A mood-based movie and music recommender. Its easy, pick a vibe, choose between movies or music, and get personalized recommendations instantly
 
 ## Live Demo
-[Insert your GitHub Pages link here]
+https://serana814.github.io/pick-your-vibe/
 
 ## Features
 - 6 mood/vibe options to choose from
