@@ -11,14 +11,15 @@ const vibes = [
     { name: "Romantic", emoji: "🌹", color: "#e88ea0", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1EVGJJ3r00UGAt" },
     { name: "Chill", emoji: "😌", color: "#a78bdb", playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" }
 ];
+
 // Movie genre IDs from TMDB that match each vibe
 const vibeToGenre = {
-    "Cozy":        35,  // Comedy
-    "Hype":        28,  // Action
-    "Sad Girl":    18,  // Drama
-    "Adventurous": 12,  // Adventure
-    "Romantic":    10749, // Romance
-    "Chill":       16   // Animation
+    "Cozy":        35,
+    "Hype":        28,
+    "Sad Girl":    18,
+    "Adventurous": 12,
+    "Romantic":    10749,
+    "Chill":       16
 };
 
 // Your TMDB API key
@@ -48,29 +49,29 @@ function buildVibeGrid() {
     vibes.forEach(vibe => {
         const btn = document.createElement('button');
         btn.classList.add('vibe-btn');
-        btn.textContent = vibe.emoji + ' ' + vibe.name;
+        btn.innerHTML = `<span style="font-size: 2rem;">${vibe.emoji}</span><span>${vibe.name}</span>`;
 
-        // When clicked, store the selected vibe and show the mode selector
         btn.onclick = () => {
-    selectedVibe = vibe;
+            selectedVibe = vibe;
 
-    // Remove selected class from all buttons
-    document.querySelectorAll('.vibe-btn').forEach(b => {
-        b.classList.remove('selected');
-        b.style.borderColor = '#333';
-    });
+            // Remove selected class from all buttons
+            document.querySelectorAll('.vibe-btn').forEach(b => {
+                b.classList.remove('selected');
+                b.style.borderColor = '';
+                b.style.color = '';
+            });
 
-    // Highlight selected button with vibe color
-    btn.classList.add('selected');
-    btn.style.borderColor = vibe.color;
-    btn.style.color = vibe.color;
+            // Highlight selected button with vibe color
+            btn.classList.add('selected');
+            btn.style.borderColor = vibe.color;
+            btn.style.color = vibe.color;
 
-    // Apply vibe color to the logo and nav border
-    document.querySelector('.logo').style.color = vibe.color;
-    document.querySelector('nav').style.borderBottomColor = vibe.color;
+            // Apply vibe color to nav border
+            document.querySelector('nav').style.borderBottomColor = vibe.color;
 
-    document.getElementById('mode-selector').classList.remove('hidden');
-};
+            document.getElementById('mode-selector').classList.remove('hidden');
+            updatePlayerBar(vibe);
+        };
 
         grid.appendChild(btn);
     });
@@ -140,7 +141,6 @@ function displayMovies(movies) {
         const btn = document.createElement('button');
         btn.textContent = '+ Watchlist';
 
-        // Attach click handler directly instead of using onclick in HTML
         btn.addEventListener('click', () => {
             saveToWatchlist(movie.id, movie.title, movie.poster_path);
         });
@@ -232,38 +232,24 @@ function removeFromWatchlist(id) {
 }
 
 // ==============================
-// ON PAGE LOAD
-// ==============================
-buildVibeGrid();
-
-// Load saved theme preference
-if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light-mode');
-    document.getElementById('theme-toggle').textContent = '🌙 Dark Mode';
-}
-
-document.querySelector('a[onclick="showPage(\'watchlist\')"]').addEventListener('click', displayWatchlist);
-
-// ==============================
 // THEME TOGGLE
-// Switches between dark and light mode
+// Switches between light (default) and dark mode
 // ==============================
 function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('theme-toggle');
 
-    body.classList.toggle('light-mode');
+    body.classList.toggle('dark-mode');
 
-    // Update button label based on current mode
-    if (body.classList.contains('light-mode')) {
-        btn.textContent = '🌙 Dark Mode';
-    } else {
+    if (body.classList.contains('dark-mode')) {
         btn.textContent = '☀️ Light Mode';
+    } else {
+        btn.textContent = '🌙 Dark Mode';
     }
 
-    // Save preference to localStorage
-    localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+    localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
+
 // ==============================
 // GO BACK
 // Returns user to home page and resets mode selector
@@ -272,3 +258,31 @@ function goBack() {
     showPage('home');
     document.getElementById('mode-selector').classList.add('hidden');
 }
+
+// ==============================
+// UPDATE PLAYER BAR
+// Shows the bottom bar with current vibe info
+// ==============================
+function updatePlayerBar(vibe) {
+    const bar = document.getElementById('player-bar');
+    const spotifyUrl = vibe.playlist.replace('open.spotify.com/embed/playlist', 'open.spotify.com/playlist');
+
+    document.getElementById('player-emoji').textContent = vibe.emoji;
+    document.getElementById('player-vibe-name').textContent = vibe.name + ' Playlist';
+    document.getElementById('player-link').href = spotifyUrl;
+
+    bar.classList.remove('hidden');
+}
+
+// ==============================
+// ON PAGE LOAD
+// ==============================
+buildVibeGrid();
+
+// Load saved theme preference
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('theme-toggle').textContent = '☀️ Light Mode';
+}
+
+document.querySelector('a[onclick="showPage(\'watchlist\')"]').addEventListener('click', displayWatchlist);

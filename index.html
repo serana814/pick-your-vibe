@@ -5,34 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe Check</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Navigation -->
     <nav>
-        <span class="logo">Vibe Check</span>
+        <div class="logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#fb923c"/>
+                        <stop offset="100%" style="stop-color:#ec4899"/>
+                    </linearGradient>
+                </defs>
+                <rect x="2" y="12" width="3" height="8" rx="1.5" fill="url(#logoGrad)"/>
+                <rect x="7" y="8" width="3" height="14" rx="1.5" fill="url(#logoGrad)"/>
+                <rect x="12" y="4" width="3" height="20" rx="1.5" fill="url(#logoGrad)"/>
+                <rect x="17" y="8" width="3" height="14" rx="1.5" fill="url(#logoGrad)"/>
+                <rect x="22" y="12" width="3" height="8" rx="1.5" fill="url(#logoGrad)"/>
+            </svg>
+            Vibe Check
+        </div>
         <div class="nav-links">
             <a href="#" onclick="showPage('home')">Home</a>
-            <a href="#" onclick="showPage('results')">Results</a>
             <a href="#" onclick="showPage('watchlist')">Watchlist</a>
         </div>
-        <button id="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+        <button id="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
     </nav>
 
     <!-- Home Page -->
     <div id="page-home" class="page">
-        <h1>What's your vibe?</h1>
+        <h1>What's your <span id="vibe-word">vibe</span>?</h1>
         <p>Pick a mood to get started.</p>
-
-        <!-- Vibe buttons will go here -->
         <div id="vibe-grid"></div>
-
-        <!-- After picking a vibe, user chooses movies or music -->
         <div id="mode-selector" class="hidden">
             <p>Are you in the mood for...</p>
-            <button onclick="loadResults('movies')">🎬 Movies</button>
-            <button onclick="loadResults('music')">🎵 Music</button>
+            <div class="btn-group">
+                <button onclick="loadResults('movies')">🎬 Movies</button>
+                <button onclick="loadResults('music')">🎵 Music</button>
+            </div>
         </div>
     </div>
 
@@ -47,6 +59,18 @@
     <div id="page-watchlist" class="page hidden">
         <h2>My Watchlist</h2>
         <div id="watchlist-grid"></div>
+    </div>
+
+    <!-- Bottom Player Bar -->
+    <div id="player-bar" class="hidden">
+        <div id="player-info">
+            <span id="player-emoji"></span>
+            <div>
+                <p id="player-vibe-name"></p>
+                <p id="player-subtitle">Playlist</p>
+            </div>
+        </div>
+        <a id="player-link" href="#" target="_blank">Open in Spotify ↗</a>
     </div>
 
     <script src="js/main.js"></script>
